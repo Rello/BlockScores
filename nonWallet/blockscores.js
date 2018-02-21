@@ -19,24 +19,14 @@ var send_acct_pw = "BlockScores";
 var lastTx;
 
 document.addEventListener("DOMContentLoaded", function () {
-
     var gameHash = window.location.href.substring(window.location.href.lastIndexOf("?") + 1).split("&")[0];
-
     if (gameHash != location.protocol + '//' + location.host + location.pathname) {
-
         document.getElementById('gameHash').value = gameHash;
-
         getGame();
-
     } else {
-
         $("#activeGameSection").hide();
-
     }
-
 });
-
-
 
 function getGame() {
 
