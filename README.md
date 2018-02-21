@@ -1,4 +1,6 @@
 # BlockScores
+[![Version](https://img.shields.io/github/release/rello/blockscores.svg)](https://github.com/rello/blockscores/blob/master/CHANGELOG.md)&#160;[![License: AGPLv3](https://img.shields.io/badge/license-AGPLv3-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
+
 Store your game scores in the blockchain
 
 Functions:
