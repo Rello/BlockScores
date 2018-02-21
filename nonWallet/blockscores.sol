@@ -1,9 +1,9 @@
 pragma solidity ^0.4.18;
-/// @title Store your GameScores in the Blockchain
-/// @author Marcel Scherello gamescores@scherello.de
+/// @title Store your game scores in the Blockchain
+/// @author Marcel Scherello blockscores@scherello.de
 /// @notice Create a custom game and start counting the scores
 /// @dev All function calls are currently implement without side effects
-contract GameScores {
+contract BlockScores {
     struct Player {
         string  playerName;
         bytes32 playerPwHash;
