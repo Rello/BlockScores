@@ -1,8 +1,15 @@
+/**
+ * Audio Player
+ *
+ * This file is licensed under the Affero General Public License version 3 or
+ * later. See the LICENSE.md file.
+ *
+ * @author Marcel Scherello <blockscores@scherello.de>
+ * @copyright 2018 Marcel Scherello
+ */
 
 var web3 = new Web3();
 web3.setProvider(new web3.providers.HttpProvider("xxxxx"));
-
-var abiArray = [{ "constant": false, "inputs": [{ "name": "gameHash", "type": "bytes32" }, { "name": "playerName", "type": "string" }, { "name": "playerPw", "type": "string" }], "name": "confirmGameScore", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "name": "gameHash", "type": "bytes32" }, { "name": "playerName", "type": "string" }, { "name": "adminPw", "type": "string" }], "name": "removePlayerFromGame", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [{ "name": "name", "type": "string" }, { "name": "adminPw", "type": "string" }], "name": "createGameHash", "outputs": [{ "name": "", "type": "bytes32" }], "payable": false, "stateMutability": "pure", "type": "function" }, { "constant": false, "inputs": [{ "name": "name", "type": "string" }, { "name": "gameDescription", "type": "string" }, { "name": "adminPw", "type": "string" }], "name": "addNewGame", "outputs": [{ "name": "gameHash", "type": "bytes32" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "name": "gameHash", "type": "bytes32" }, { "name": "playerName", "type": "string" }, { "name": "score", "type": "uint256" }], "name": "addGameScore", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [{ "name": "gameHash", "type": "bytes32" }], "name": "getGameByHash", "outputs": [{ "name": "", "type": "string" }, { "name": "", "type": "string" }, { "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "gameHash", "type": "bytes32" }, { "name": "playerID", "type": "uint256" }], "name": "getPlayerByGame", "outputs": [{ "name": "", "type": "string" }, { "name": "", "type": "uint256" }, { "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "gameHash", "type": "bytes32" }, { "name": "playerName", "type": "string" }, { "name": "playerPw", "type": "string" }], "name": "addPlayerToGame", "outputs": [{ "name": "newPlayerID", "type": "uint256" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "init", "outputs": [{ "name": "gameHash", "type": "bytes32" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "anonymous": false, "inputs": [{ "indexed": false, "name": "gameHash", "type": "bytes32" }, { "indexed": false, "name": "name", "type": "string" }], "name": "newGameCreated", "type": "event" }];
 
 // Access the smart contract
 var contract_address = "0x277263883C1D59a00619C7b018B93544c42aEAb1";
@@ -10,8 +17,8 @@ var contract_address = "0x277263883C1D59a00619C7b018B93544c42aEAb1";
 // instantiate by address
 var MyContract = web3.eth.contract(abiArray);
 var contractInstance = MyContract.at(contract_address);
-var gas = '300000';
-var gasPrice = '18000000000';
+var gas = '300000'; // using fixed gas for now
+var gasPrice = '18000000000'; // using fixed gasprice for now
 
 // anonymous account mapping
 var send_acct = "0xcbaFF6F49ee16b78264F82B0338CCFf380c1D357";
