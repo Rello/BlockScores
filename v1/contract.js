@@ -9,4 +9,4 @@
  */
 
 // Access the smart contract
-var contract_address = "0x277263883C1D59a00619C7b018B93544c42aEAb1";
+var contract_address = "0x145b04d04C4A836F0B4d06243C7b920A84CC1752";
