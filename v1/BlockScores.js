@@ -15,9 +15,10 @@ window.addEventListener('load', function () {
         // Use Mist/MetaMask's provider
         web3js = new Web3(web3.currentProvider);
     } else {
-        console.log('No web3? You should consider trying MetaMask!')
+        console.log('No web3? You should consider trying MetaMask!');
+        alert('No web3? You should consider trying MetaMask!');
         // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-        web3js = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        //web3js = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     }
 
     // instantiate by address
@@ -38,58 +39,73 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function getGame() {
 
+    document.getElementById("existingGameSection").hidden = true;
     document.getElementById("newGameSection").hidden = true;
+    document.getElementById("activeGameSection").hidden = false;
     var gameHash = document.getElementById('gameHash').value;
 
     contractInstance.getGameByHash(gameHash, function (err, transactionHash) {
         console.log('Game Details: ', transactionHash);
-        var result = transactionHash;
-
-        var gameTitle = result[0];
-        var gameDescrtiption = result[1];
-        var numPlayers = result[2]['c'][0];
-        var divPlayers = document.getElementById("gamePlayers");
-        divPlayers.innerHTML = "";
-
-        console.log(JSON.stringify(result));
-        document.getElementById("gameTitle").innerText = gameTitle;
-        document.getElementById("gameDescription").innerText = gameDescrtiption;
-
-        html = '<table class="table"><thead><tr><th>Player</th>';
-        html += '<th>Total Score</th>';
-        html += '<th>unconfirmed plays</th>';
-        html += '<th>add score</th>';
-        html += '</tr></thead><tbody>';
-        document.getElementById("gamePlayers").innerHTML = html;
-
-        for (i = 0; i < numPlayers; i++) {
-            contractInstance.getPlayerByGame(gameHash, i, function (err, transactionHash) {
-                console.log(transactionHash);
-                result = transactionHash;
-                var score = result[1]['c'][0];
-                var score_unconfirmed = result[2]['c'][0];
-                var playerName = result[0];
-                if (playerName != '') {
-                    html = '<tr><td>' + playerName + '</td>';
-                    html += '<td>' + score + '</td>';
-
-                    if (score_unconfirmed != 0) {
-                        html += '<td>(+' + score_unconfirmed + ')&nbsp;<i onClick="confirmGameScorePopup(\'' + playerName + '\')"class="fa fa-check-circle-o" style="cursor: pointer; color: #5cb85c;font-size: 20px;font-color: green;" aria-hidden="true" title="Confirm Play Scores"></i></td>';
-                    } else {
-                        html += '<td></td>';
-                    }
-
-                    html += '<td><div class="col-md-4" style="padding-left: 0"><input class="form-control" id="' + playerName + '_value" value="0"></div>';
-                    html += '<div class="col-md-8" style="padding-left: 0"><button class="btn btn-default" type="button" id="' + playerName + '_button" onClick="addScore(\'' + playerName + '\');" style="min-width: 20px;"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></div></td>';
-                    html += '</tr>';
-                    document.getElementById("gamePlayers").innerHTML += html;
-                }
-
-            });
-        }
-        //divPlayers.innerHTML += "</tbody></table>";
+        displayGame(transactionHash,);
     });
 
+};
+
+function displayGame(gameData, demo) {
+    var gameTitle = gameData[0];
+    var gameDescrtiption = gameData[1];
+    var numPlayers = gameData[2]['c'][0];
+    var divPlayers = document.getElementById("gamePlayers");
+    divPlayers.innerHTML = "";
+
+    console.log(JSON.stringify(gameData));
+    document.getElementById("gameTitle").innerText = gameTitle;
+    document.getElementById("gameDescription").innerText = gameDescrtiption;
+
+    html = '<table class="u-full-width" id="gameTable"><thead><tr>';
+    html += '<th>Player</th><th>Total</th><th>pend.</th><th>add score</th>';
+    html += '</tr></thead><tbody></tbody></table>';
+
+    if (!demo) getGamePlayers(numPlayers);
+};
+
+function getGamePlayers(numPlayers) {
+
+    var gameHash = document.getElementById('gameHash').value;
+    document.getElementById("gamePlayers").innerHTML = html;
+
+    for (i = 0; i < numPlayers; i++) {
+        contractInstance.getPlayerByGame(gameHash, i, function (err, transactionHash) {
+            console.log(transactionHash);
+            result = transactionHash;
+            var score = result[1]['c'][0];
+            var score_unconfirmed = result[2]['c'][0];
+            var playerName = result[0];
+            var table = document.getElementById("gameTable").getElementsByTagName('tbody')[0];
+            if (playerName != '') {
+
+                var row = table.insertRow(-1);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                var cell4 = row.insertCell(3);
+
+                cell1.innerHTML = playerName;
+                cell1.className = 'playerName';
+                cell2.innerHTML = score;
+
+
+                if (score_unconfirmed != 0) {
+                    cell3.innerHTML = "(+' + score_unconfirmed + ')&nbsp;<i onClick=\"confirmGameScorePopup(\\'' + playerName + '\\')\"class=\"fa fa-check-circle-o\" style=\"cursor: pointer; color: #5cb85c;font-size: 20px;font-color: green;\" aria-hidden=\"true\" title=\"Confirm Play Scores\"></i>";
+                } else {
+                    cell3.innerHTML = '';
+                }
+
+                cell4.innerHTML = '<input size="2" class="form-control" id="' + playerName + '_value" value="0"><button class="button-primary small" type="button" id="' + playerName + '_button" onClick="addScore(\'' + playerName + '\');"><i>+</i></button>';
+            }
+
+        });
+    }
 };
 
 function createGame() {
@@ -298,4 +314,25 @@ function addPlayerSlideDown() {
     } else {
         $("#addPlayerSlider").slideDown();
     }
+};
+
+function newGameSection() {
+    if (document.getElementById("newGameSection").hidden == true) {
+        document.getElementById("newGameSection").hidden = false;
+    } else {
+        document.getElementById("newGameSection").hidden = true;
+    }
+};
+
+function existingGameSection() {
+    if (document.getElementById("existingGameSection").hidden == true) {
+        document.getElementById("existingGameSection").hidden = false;
+    } else {
+        document.getElementById("existingGameSection").hidden = true;
+    }
+};
+
+function demoGame() {
+    var gameArray = ["Demo Scoreboard", "Demo without blockchain interaction",  {c : [ "2"]}];
+    displayGame(gameArray, true);
 };

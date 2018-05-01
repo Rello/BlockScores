@@ -1,32 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>BlockScores</title>
     <script src="abi.js"></script>
-    <script src="BlockScores.js"></script>
+    <script src="BlockScores.js?123"></script>
     <script src="contract.js"></script>
+    <link rel="stylesheet" href="BlockScores.css?123">
 </head>
 <body>
+<div class="container">
+    <div class="header">
+        <h2>BlockScores</h2>
+        <h5>No coins, no tokens - just scores</h5>
+    </div>
 
-<div id="activeGameSection"></div>
-<div id="newGameSection">
-    New Game
-    <input id="newGameName" value="gameName">
-    <input id="newGameDescription" value="gameDescription">
-    <button id="createGame_button" onclick="createGame()"></button>
+    <div class="content">
+    <div id="activeGameSection">
+        <div class="gameheader">
+            <h4 id="gameTitle"></h4>
+            <h6 id="gameDescription"></h6>
+        </div>
+            <div id="gamePlayers"></div>
+
+            New Player:
+            <input id="playerName" value="Player Name">
+            <button id="addPlayer_button" onclick="addPlayer()"></button>
+    </div>
+
+    <div class="row">
+        <div class="one-half column">
+            <h5 onclick="newGameSection()">&#8658; Create a new game</h5>
+            <div id="newGameSection">
+                <span>Title of the game </span><input id="newGameName" value="Title"><br>
+                <span>Desctiption of the game </span><input id="newGameDescription" value="Description"><br>
+                <button id="newGame_button" onclick="createGame()">Create</button>
+            </div>
+        </div>
+        <div class="one-half column">
+            <h5 onclick="existingGameSection()">&#8658; Open existing game</h5>
+            <div id="existingGameSection">
+                <span>Existing game hash </span><br>
+                <input size="30" id="gameHash" value="0x3ba781a3b14aaf356f68ee5e85e393411e05267a1522795b9127b0013ce9378d"><br>
+                <button id="createGame_button" onclick="getGame()">open existing game</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
 </div>
-
-<input id="gameHash" value="0x3ba781a3b14aaf356f68ee5e85e393411e05267a1522795b9127b0013ce9378d">
-<br>
-<span id="gameTitle"></span><br>
-<span id="gameDescription"></span><br>
-<br>
-<div id="gamePlayers"></div>
-
-New Player:
-<input id="playerName" value="Player Name">
-<button id="addPlayer_button" onclick="addPlayer()"></button>
 
 </body>
 </html>
