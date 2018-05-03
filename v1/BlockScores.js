@@ -32,10 +32,48 @@ window.addEventListener('load', function () {
         document.getElementById("activeGameSection").hidden = true;
     }
 
+    contractInstance.gameCost(function (err, transactionHash) {
+        gameCost = transactionHash;
+        console.log('GameCost: ', transactionHash);
+    })
+
+    contractInstance.playerCost(function (err, transactionHash) {
+        playerCost = transactionHash;
+        console.log('PlayerCost: ', transactionHash);
+    })
+
+    priceForGas = '3000000000';
+
 })
 
 document.addEventListener("DOMContentLoaded", function () {
 });
+
+function createGame() {
+    var button = document.getElementById('createGame_button');
+    button.innerHTML = 'in progress';
+    button.disabled = true;
+    var gameName = document.getElementById('newGameName').value;
+    var gameAscii = web3.fromAscii(gameName);
+    var gameDescription = document.getElementById('newGameDescription').value;
+
+    var getData = contractInstance.addNewGame.getData(gameAscii, gameDescription);
+    web3.eth.sendTransaction({
+            to: contract_address,
+            from: web3.eth.accounts[0],
+            gasPrice: priceForGas,
+            value: gameCost,
+            data: getData
+        }, function (err, transactionHash) {
+            if (err) return console.log('Oh no!: ' + err.message);
+            console.log('Tx: ', transactionHash);
+        }
+    );
+    contractInstance.createGameHash(gameName, web3.eth.accounts[0], function (err, transactionHash) {
+        document.getElementById('gameHash').value = transactionHash;
+        console.log('Game Hash: ', transactionHash);
+    })
+};
 
 function getGame() {
 
@@ -46,13 +84,13 @@ function getGame() {
 
     contractInstance.getGameByHash(gameHash, function (err, transactionHash) {
         console.log('Game Details: ', transactionHash);
-        displayGame(transactionHash,);
+        displayGame(transactionHash,'');
     });
 
 };
 
 function displayGame(gameData, demo) {
-    var gameTitle = gameData[0];
+    var gameTitle = web3.toAscii(gameData[0]);
     var gameDescrtiption = gameData[1];
     var numPlayers = gameData[2]['c'][0];
     var divPlayers = document.getElementById("gamePlayers");
@@ -65,107 +103,106 @@ function displayGame(gameData, demo) {
     html = '<table class="u-full-width" id="gameTable"><thead><tr>';
     html += '<th>Player</th><th>Total</th><th>pend.</th><th>add score</th>';
     html += '</tr></thead><tbody></tbody></table>';
+    document.getElementById("gamePlayers").innerHTML = html;
 
     if (!demo) getGamePlayers(numPlayers);
 };
 
-function getGamePlayers(numPlayers) {
 
-    var gameHash = document.getElementById('gameHash').value;
-    document.getElementById("gamePlayers").innerHTML = html;
+function addPlayer() {
 
-    for (i = 0; i < numPlayers; i++) {
-        contractInstance.getPlayerByGame(gameHash, i, function (err, transactionHash) {
-            console.log(transactionHash);
-            result = transactionHash;
-            var score = result[1]['c'][0];
-            var score_unconfirmed = result[2]['c'][0];
-            var playerName = result[0];
-            var table = document.getElementById("gameTable").getElementsByTagName('tbody')[0];
-            if (playerName != '') {
-
-                var row = table.insertRow(-1);
-                var cell1 = row.insertCell(0);
-                var cell2 = row.insertCell(1);
-                var cell3 = row.insertCell(2);
-                var cell4 = row.insertCell(3);
-
-                cell1.innerHTML = playerName;
-                cell1.className = 'playerName';
-                cell2.innerHTML = score;
-
-
-                if (score_unconfirmed != 0) {
-                    cell3.innerHTML = "(+' + score_unconfirmed + ')&nbsp;<i onClick=\"confirmGameScorePopup(\\'' + playerName + '\\')\"class=\"fa fa-check-circle-o\" style=\"cursor: pointer; color: #5cb85c;font-size: 20px;font-color: green;\" aria-hidden=\"true\" title=\"Confirm Play Scores\"></i>";
-                } else {
-                    cell3.innerHTML = '';
-                }
-
-                cell4.innerHTML = '<input size="2" class="form-control" id="' + playerName + '_value" value="0"><button class="button-primary small" type="button" id="' + playerName + '_button" onClick="addScore(\'' + playerName + '\');"><i>+</i></button>';
-            }
-
-        });
-    }
-};
-
-function createGame() {
-    var button = document.getElementById('createGame_button');
+    var button = document.getElementById('addPlayer_button');
     button.innerHTML = 'in progress';
     button.disabled = true;
-    var gameName = document.getElementById('newGameName').value;
-    var gameDescription = document.getElementById('newGameDescription').value;
 
-    var getData = contractInstance.addNewGame.getData(gameName, gameDescription);
+    var playerName = document.getElementById('playerName').value;
+    var playerAscii = web3.fromAscii(playerName);
+    var gameHash = document.getElementById('gameHash').value;
+
+    var getData = contractInstance.addPlayerToGame.getData(gameHash, playerAscii);
     web3.eth.sendTransaction({
             to: contract_address,
             from: web3.eth.accounts[0],
+            gasPrice: priceForGas,
+            value: playerCost,
             data: getData
         }, function (err, transactionHash) {
             if (err) return renderMessage('Oh no!: ' + err.message)
             console.log('Tx: ', transactionHash);
+            document.getElementById('playerName').value = "Player Name";
+            //$('#addPlayerSlider').slideUp();
         }
     );
-    contractInstance.createGameHash(gameName, web3.eth.accounts[0], function (err, transactionHash) {
-        document.getElementById('gameHash').value = transactionHash;
-        console.log('Game Hash: ', transactionHash);
-    })
+};
+
+function getGamePlayers(numPlayers) {
+    var gameHash = document.getElementById('gameHash').value;
+    for (i = 0; i < numPlayers; i++) {
+        contractInstance.getPlayerByGame(gameHash, i, function (err, transactionHash) {
+            console.log(transactionHash);
+            displayPlayer(transactionHash,'');
+        });
+    }
+};
+
+function displayPlayer(playerData, demo) {
+    var score = playerData[1]['c'][0];
+    var score_unconfirmed = playerData[2]['c'][0];
+    var playerName = web3.toAscii(playerData[0]);
+    var table = document.getElementById("gameTable").getElementsByTagName('tbody')[0];
+    if (playerName != '') {
+        var row = table.insertRow(-1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+
+        cell1.innerHTML = playerName;
+        cell1.className = 'playerName';
+        cell2.innerHTML = score;
+
+        if (score_unconfirmed != 0) {
+            cell3.innerHTML = '(+' + score_unconfirmed + ')&nbsp;<button class="button-primary small" type="button" onClick="confirmGameScorePopup(\'' + playerName + '\')\"><i>&#10003;</i></button>';
+        } else {
+            cell3.innerHTML = '';
+        }
+        cell4.innerHTML = '<input size="2" class="form-control" id="' + playerName + '_value" value="0"><button class="button-primary small" type="button" id="' + playerName + '_button" onClick="addScore(\'' + playerName + '\');"><i>+</i></button>';
+    }
 };
 
 function addScore(playerName) {
 
     lastTx = playerName;
     var button = document.getElementById(playerName + '_button');
-    button.innerHTML = 'in progress';
+    button.innerHTML = '&#8634';
     button.disabled = true;
 
     var gameHash = document.getElementById('gameHash').value;
     var scoreValue = document.getElementById(playerName + '_value').value;
 
-    var a = web3.personal.unlockAccount(send_acct, send_acct_pw, function (error, result) {
-        if (!error) {
-            var txHash = contractInstance.addGameScore(gameHash, playerName, scoreValue, {
-                from: send_acct,
+    var getData = contractInstance.addGameScore.getData(gameHash, playerName, scoreValue);
+    web3.eth.estimateGas({
+        from: web3.eth.accounts[0],
+        data: getData,
+        to: contract_address
+    }, function(err, estimatedGas) {
+        if (err) console.log(err);
+        console.log('gas:'+estimatedGas);
+        gas = estimatedGas;
+        web3.eth.sendTransaction({
+                to: contract_address,
+                from: web3.eth.accounts[0],
+                gasPrice: priceForGas,
                 gas: gas,
-                gasPrice: gasPrice
-            }, function (error, result) {
-                txHash = result;
-                console.log(txHash);
-                var filter = web3.eth.filter('latest', function (error, result) {
-                    if (!error) {
-                        console.log(web3.eth.getTransaction(txHash).blockNumber);
-                        button.innerHTML = 'sent';
-                        button.disabled = false;
-                        filter.stopWatching();
-                        console.log(playerName + '-' + lastTx);
-                        if (lastTx === playerName) getGame();
-                    } else {
-                        console.error(error);
-                    }
-                });
-            });
-        } else {
-            console.error(error);
-        }
+                data: getData
+            }, function (err, transactionHash) {
+                if (err) return console.log('Oh no!: ' + err.message);
+                console.log('Tx: ', transactionHash);
+                button.innerHTML = 'sent';
+                button.disabled = false;
+                if (lastTx === playerName) getGame();
+            }
+        );
 
     });
 
@@ -210,29 +247,6 @@ function confirmGameScore(playerName, confPW) {
 
     });
 
-};
-
-function addPlayer() {
-
-    var button = document.getElementById('addPlayer_button');
-    button.innerHTML = 'in progress';
-    button.disabled = true;
-
-    var playerName = document.getElementById('playerName').value;
-    var gameHash = document.getElementById('gameHash').value;
-
-    var getData = contractInstance.addPlayerToGame.getData(gameHash, playerName);
-    web3.eth.sendTransaction({
-            to: contract_address,
-            from: web3.eth.accounts[0],
-            data: getData
-        }, function (err, transactionHash) {
-            if (err) return renderMessage('Oh no!: ' + err.message)
-            console.log('Tx: ', transactionHash);
-            document.getElementById('playerName').value = "Player Name";
-            //$('#addPlayerSlider').slideUp();
-        }
-    );
 };
 
 function removePlayer() {
@@ -285,6 +299,7 @@ function removePlayer() {
 
 };
 
+
 function getGamePopup() {
     var gameHash = prompt("Please enter your game key", "0x364317d077d3b41c0ecb76e0d9099d38289c9f47dd6fcb94c84041df519b034e");
     window.location.href = location.protocol + '//' + location.host + location.pathname + "?" + gameHash;
@@ -333,6 +348,16 @@ function existingGameSection() {
 };
 
 function demoGame() {
+    document.getElementById("existingGameSection").hidden = true;
+    document.getElementById("newGameSection").hidden = true;
+    document.getElementById("activeGameSection").hidden = false;
+
     var gameArray = ["Demo Scoreboard", "Demo without blockchain interaction",  {c : [ "2"]}];
     displayGame(gameArray, true);
+
+    var playerArray = ["Player 1", {c : [ "1"]},  {c : [ "1"]}];
+    displayPlayer(playerArray, true);
+
+    var playerArray = ["Player 2", {c : [ "2"]},  {c : [ "2"]}];
+    displayPlayer(playerArray, true);
 };

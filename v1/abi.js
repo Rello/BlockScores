@@ -1,5 +1,50 @@
 var abiArray = [
     {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "gameHash",
+                "type": "bytes32"
+            },
+            {
+                "name": "playerID",
+                "type": "uint8"
+            }
+        ],
+        "name": "getPlayerByGame",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bytes32"
+            },
+            {
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [],
+        "name": "withdraw",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "constant": false,
         "inputs": [
             {
@@ -7,23 +52,61 @@ var abiArray = [
                 "type": "bytes32"
             },
             {
-                "name": "name",
-                "type": "string"
-            },
-            {
-                "name": "gameDescription",
-                "type": "string"
-            },
-            {
-                "name": "numPlayers",
-                "type": "uint256"
-            },
-            {
-                "name": "gameOwner",
-                "type": "address"
+                "name": "playerName",
+                "type": "bytes32"
             }
         ],
-        "name": "setGameMetadata",
+        "name": "addPlayerToGame",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "gameHash",
+                "type": "bytes32"
+            },
+            {
+                "name": "playerName",
+                "type": "bytes32"
+            },
+            {
+                "name": "score",
+                "type": "uint256"
+            }
+        ],
+        "name": "addGameScore",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "gameHash",
+                "type": "bytes32"
+            },
+            {
+                "name": "playerName",
+                "type": "bytes32"
+            }
+        ],
+        "name": "removePlayerFromGame",
         "outputs": [
             {
                 "name": "",
@@ -36,10 +119,24 @@ var abiArray = [
     },
     {
         "constant": true,
+        "inputs": [],
+        "name": "playerCost",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
         "inputs": [
             {
                 "name": "name",
-                "type": "string"
+                "type": "bytes32"
             },
             {
                 "name": "admin",
@@ -66,10 +163,10 @@ var abiArray = [
             },
             {
                 "name": "playerName",
-                "type": "string"
+                "type": "bytes32"
             }
         ],
-        "name": "removePlayerFromGame",
+        "name": "confirmGameScore",
         "outputs": [
             {
                 "name": "",
@@ -89,7 +186,7 @@ var abiArray = [
             },
             {
                 "name": "name",
-                "type": "string"
+                "type": "bytes32"
             },
             {
                 "name": "gameDescription",
@@ -108,30 +205,17 @@ var abiArray = [
         "type": "function"
     },
     {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "gameHash",
-                "type": "bytes32"
-            },
-            {
-                "name": "playerName",
-                "type": "string"
-            },
-            {
-                "name": "score",
-                "type": "uint256"
-            }
-        ],
-        "name": "addGameScore",
+        "constant": true,
+        "inputs": [],
+        "name": "balance",
         "outputs": [
             {
                 "name": "",
-                "type": "bool"
+                "type": "uint256"
             }
         ],
         "payable": false,
-        "stateMutability": "nonpayable",
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -146,7 +230,7 @@ var abiArray = [
         "outputs": [
             {
                 "name": "",
-                "type": "string"
+                "type": "bytes32"
             },
             {
                 "name": "",
@@ -177,26 +261,9 @@ var abiArray = [
     },
     {
         "constant": true,
-        "inputs": [
-            {
-                "name": "gameHash",
-                "type": "bytes32"
-            },
-            {
-                "name": "playerID",
-                "type": "uint256"
-            }
-        ],
-        "name": "getPlayerByGame",
+        "inputs": [],
+        "name": "gameCost",
         "outputs": [
-            {
-                "name": "",
-                "type": "string"
-            },
-            {
-                "name": "",
-                "type": "uint256"
-            },
             {
                 "name": "",
                 "type": "uint256"
@@ -210,15 +277,38 @@ var abiArray = [
         "constant": false,
         "inputs": [
             {
-                "name": "gameHash",
+                "name": "name",
                 "type": "bytes32"
             },
             {
-                "name": "playerName",
+                "name": "gameDescription",
                 "type": "string"
             }
         ],
-        "name": "confirmGameScore",
+        "name": "addNewGame",
+        "outputs": [
+            {
+                "name": "gameHash",
+                "type": "bytes32"
+            }
+        ],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "costGame",
+                "type": "uint256"
+            },
+            {
+                "name": "costPlayer",
+                "type": "uint256"
+            }
+        ],
+        "name": "setCosts",
         "outputs": [
             {
                 "name": "",
@@ -237,15 +327,27 @@ var abiArray = [
                 "type": "bytes32"
             },
             {
-                "name": "playerName",
+                "name": "name",
+                "type": "bytes32"
+            },
+            {
+                "name": "gameDescription",
                 "type": "string"
+            },
+            {
+                "name": "numPlayers",
+                "type": "uint8"
+            },
+            {
+                "name": "gameOwner",
+                "type": "address"
             }
         ],
-        "name": "addPlayerToGame",
+        "name": "setGameMetadata",
         "outputs": [
             {
-                "name": "newPlayerID",
-                "type": "uint256"
+                "name": "",
+                "type": "bool"
             }
         ],
         "payable": false,
@@ -253,27 +355,21 @@ var abiArray = [
         "type": "function"
     },
     {
-        "constant": false,
+        "anonymous": false,
         "inputs": [
             {
-                "name": "name",
-                "type": "string"
+                "indexed": true,
+                "name": "_from",
+                "type": "address"
             },
             {
-                "name": "gameDescription",
-                "type": "string"
+                "indexed": false,
+                "name": "_value",
+                "type": "uint256"
             }
         ],
-        "name": "addNewGame",
-        "outputs": [
-            {
-                "name": "gameHash",
-                "type": "bytes32"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
+        "name": "Withdrawal",
+        "type": "event"
     },
     {
         "anonymous": false,
@@ -286,7 +382,7 @@ var abiArray = [
             {
                 "indexed": false,
                 "name": "name",
-                "type": "string"
+                "type": "bytes32"
             }
         ],
         "name": "newGameCreated",
