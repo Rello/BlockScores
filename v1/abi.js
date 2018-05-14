@@ -1,4 +1,4 @@
-var abiArray = [
+var abiArray_rospen = [
     {
         "constant": true,
         "inputs": [

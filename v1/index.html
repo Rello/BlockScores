@@ -12,39 +12,62 @@
 <body>
 <div class="container">
     <div class="header">
-        <h2>BlockScores</h2>
-        <h5>No coins, no tokens - just scores</h5>
+        <h2 onclick="javascript:location.href='./index.html'">BlockScores</h2>
+        <h5 id="subheader">No coins, no tokens - just scores</h5>
+    </div>
+
+    <div class="warning" id="warning">
+        <br>
+        <span>An Ethereum wallet is required to interact with a blockchain.<br>
+            You should consider MetaMask, Mist or any other DApp Browser.<br>
+            More information can be found <a href="http://blockscores.com/faq">here</a>
+        </span><br>
+        <br>
+    </div>
+
+    <div class="intro" id="intro">
+        <br>
+        <span>Create your personal scoreboard with one click</span><br>
+        <span>Register players; count scores; confirm scores; manage players;</span>
+        <br><br><button class="button-primary" id="demoGame_button" onclick="demoGame()">open demo game</button>
+        <br>
+        <br>
     </div>
 
     <div class="content">
-    <div id="activeGameSection">
+    <div hidden id="activeGameSection">
         <div class="gameheader">
             <h4 id="gameTitle"></h4>
             <h6 id="gameDescription"></h6>
         </div>
             <div id="gamePlayers"></div>
 
-            New Player:
-            <input id="playerName" value="Player Name">
-            <button id="addPlayer_button" onclick="addPlayer()"></button>
+            <div id="newPlayer">
+                <h6 onclick="toggleSection('newPlayer')">&rArr; Add Player</h6>
+                <div id="newPlayerSection" hidden>
+                    <input id="playerName" value="Player Name"><br>
+                    <button id="addPlayer_button" onclick="addPlayer()">add</button>
+                </div>
+            </div>
     </div>
 
     <div class="row">
         <div class="one-half column">
-            <h5 onclick="newGameSection()">&#8658; Create a new game</h5>
-            <div id="newGameSection">
-                <span>Title of the game </span><input id="newGameName" value="Title"><br>
-                <span>Desctiption of the game </span><input id="newGameDescription" value="Description"><br>
+            <h5 onclick="toggleSection('newGame')">&rArr; Create a new game</h5>
+            <div id="newGameSection" hidden>
+                <span>Current cost estimate </span><span id="introGameCost">0</span><span> ETH</span><br>
+                <span>Earn </span><span id="introPlayerCost">x</span><span> ETH for every player added</span><br><br>
+                <span>Title of your scoreboard</span><br><input id="newGameName" value="Title"><br>
+                <span>Desctiption of the game </span><br><input id="newGameDescription" value="Description"><br>
                 <button id="newGame_button" onclick="createGame()">Create</button>
             </div>
         </div>
-        <div class="one-half column">
-            <h5 onclick="existingGameSection()">&#8658; Open existing game</h5>
-            <div id="existingGameSection">
+        <div class="one-half column" style=" text-align: right;">
+            <h5 onclick="toggleSection('existingGame')">Open existing game &lArr;</h5>
+            <div id="existingGameSection" hidden>
                 <span>Existing game hash </span><br>
-                <input size="30" id="gameHash" value="0x3ba781a3b14aaf356f68ee5e85e393411e05267a1522795b9127b0013ce9378d"><br>
-                <button id="createGame_button" onclick="getGame()">open existing game</button>
-                <button class="button-primary" id="demoGame_button" onclick="demoGame()">open demo game</button>
+                <input size="35" id="gameHash" value="0xa65c01a8ff4316f70da194b46c9fe64ee64aaef2e4900b6878205d546ff5d02e"><br>
+                <button id="existingGame_button" onclick="setGameURL()">open existing game</button>
             </div>
         </div>
     </div>
