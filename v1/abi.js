@@ -1,4 +1,4 @@
-var abiArray_rospen = [
+var abiArray = [
     {
         "constant": true,
         "inputs": [
@@ -377,11 +377,6 @@ var abiArray_rospen = [
             {
                 "indexed": false,
                 "name": "gameHash",
-                "type": "bytes32"
-            },
-            {
-                "indexed": false,
-                "name": "name",
                 "type": "bytes32"
             }
         ],

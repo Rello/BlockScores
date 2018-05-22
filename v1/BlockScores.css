@@ -25,12 +25,41 @@
 - Media Queries
 */
 
+.content {
+    margin-bottom: 20px;
+}
+
+.header.small {
+    background-size: 50px;
+}
+.header.small .subheader{
+    display: none;
+}
+
 .header {
-    margin-top: 3rem;
+    /*margin-top: 3rem;*/
     text-align: center;
     background-color: steelblue;
     color: #F1F1F1;
+
+    background-image: url('http://blockscores.com/wp-content/uploads/2018/05/logo_corner-3.png');
+    background-position: 10px center;
+    background-repeat: no-repeat;
+    background-size: 90px;
+    border-radius: 5px;
 }
+
+.network {
+    font-size: 10px;
+    color: green;
+}
+
+@media (max-width: 490px) {
+    .header {
+        background-size: 50px;
+    }
+}
+
 .intro {
     text-align: center;
 }
@@ -46,6 +75,7 @@
     text-align: center;
     background-color: lightsteelblue;
     color: #F1F1F1;
+    border-radius: 5px;
 }
 
 .playerName {
@@ -59,6 +89,27 @@
     line-height: 20px;
 }
 
+.sectionLeft {
+    border-left-width: 1px;
+    border-left-style: solid;
+    padding-left: 10px;
+}
+
+.sectionRight {
+    border-right-width: 1px;
+    border-right-style: solid;
+    padding-right: 10px;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    background-color: ghostwhite;
+}
 
 /* Grid
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -158,8 +209,8 @@ body {
     font-size: 1.6em; /* currently ems cause chrome bug misinterpreting rems on body element */
     line-height: 1.6;
     font-weight: 400;
-    font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #222;
+    font-family: 'Open Sans', sans-serif;
+    color: #656D6D;
     background-color: ghostwhite;
 }
 
