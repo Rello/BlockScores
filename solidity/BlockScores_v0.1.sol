@@ -78,11 +78,9 @@ contract BlockScores {
     /// @param gameDescription The new subtitle for the game
     /// @return true
     function changeGameMetadata(bytes32 gameHash, bytes32 name, string gameDescription) public returns(bool) {
-        if (games[gameHash].gameOwner == msg.sender){
-            games[gameHash].gameName = name;
-            games[gameHash].gameDescription = gameDescription;
-        }
-        return true;
+        require(games[gameHash].gameOwner == msg.sender);
+        games[gameHash].gameName = name;
+        games[gameHash].gameDescription = gameDescription;
     }
 
     /// @notice  event for newly created game
@@ -110,9 +108,8 @@ contract BlockScores {
     /// @return Player name, confirmed score, unconfirmed score
     function getPlayerByGame(bytes32 gameHash, uint8 playerID) constant public returns (bytes32, uint, uint){
         Player storage p = games[gameHash].players[playerID];
-        if (p.isActive == 1){
-            return (p.playerName, p.score, p.score_unconfirmed);
-        }
+        require(p.isActive == 1);
+        return (p.playerName, p.score, p.score_unconfirmed);
     }
 
     /// @notice The game owner can remove a player
@@ -121,17 +118,11 @@ contract BlockScores {
     /// @return true/false
     function removePlayerFromGame(bytes32 gameHash, bytes32 playerName) public returns (bool){
         Game storage g = games[gameHash];
-        if (g.gameOwner == msg.sender){
-            uint8 playerID = getPlayerId (gameHash, playerName, 0);
-            if (playerID < 255 ) {
-                g.players[playerID].isActive = 0;
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+        require(g.gameOwner == msg.sender);
+        uint8 playerID = getPlayerId (gameHash, playerName, 0);
+        require(playerID < 255 );
+        g.players[playerID].isActive = 0;
+        return true;
     }
 
     /// @notice Get the player id either by player Name or address
@@ -176,12 +167,11 @@ contract BlockScores {
     function confirmGameScore(bytes32 gameHash, bytes32 playerName) public returns (bool){
         uint8 playerID = getPlayerId (gameHash, playerName, 0);
         uint8 confirmerID = getPlayerId (gameHash, "", msg.sender);
-        if (playerID < 255 && confirmerID < 255 && playerID != confirmerID) { //confirm only score of other player
-            games[gameHash].players[playerID].score += games[gameHash].players[playerID].score_unconfirmed;
-            games[gameHash].players[playerID].score_unconfirmed = 0;
-            return true;
-        } else {
-            return false;
-        }
+        require(playerID < 255); // player needs to be active
+        require(confirmerID < 255); // confirmer needs to be active
+        require(games[gameHash].players[playerID].playerAddress != msg.sender); //confirm only other players
+        games[gameHash].players[playerID].score += games[gameHash].players[playerID].score_unconfirmed;
+        games[gameHash].players[playerID].score_unconfirmed = 0;
+        return true;
     }
 }
