@@ -1,28 +1,32 @@
-# BlockScores
+# BlockScores - securing the world of scores
 [![Version](https://img.shields.io/github/release/rello/blockscores.svg)](https://github.com/rello/blockscores/blob/master/CHANGELOG.md)&#160;[![License: AGPLv3](https://img.shields.io/badge/license-AGPLv3-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 
-Store your game scores in the blockchain
-
 Functions:
-- register new game (hash)
+- register new game
 - add players
-- register (unconfirmed) scores per player
+- add scores per player
 - confirm scores of others (4-eye-principle)
-- remove players
+- manage players
+- royalty program
 
-### Non-Wallet Version
+## Demo & playground version
+- contract available at rospen at 0xd6Fa1748596CB03DF43f773568bCa537b7Cd9DBA
+- DApp direcetly available at http://blockscores.com/t/v1/index.html
+
+DApp stores:
+- Toshi
+- Cipher
+
+
+
+## Non-Wallet Version
 This version is recommended to be run on a private blockchain with web3 access to one node.
 
 All interaction can be performed without wallet integration (besides smart contract deployment).
 This makes the integration into an existing web frontend straight forward.
 One existing master account + password needs to be maintained in JS which is used for every contract call.
 
-### Wallet Version
-This version can be used on a private or on the main net.
-
-...to be done
-
-## Installation
+### Installation
 - compile and upload smart contract with e.g. Ethereum Wallet
 - maintain address in js source
 - create master account (non-wallet)
