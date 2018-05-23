@@ -1,7 +1,7 @@
 pragma solidity ^0.4.20;
-/// @title Store your game scores in the Blockchain
+/// @title Store lederboards in the Blockchain
 /// @author Marcel Scherello blockscores@scherello.de
-/// @notice Create a custom game and start counting the scores
+/// @notice Create a custom leaderboard and start counting the scores
 /// @dev All function calls are currently implement without side effects
 contract BlockScores {
     struct Player {
@@ -74,11 +74,11 @@ contract BlockScores {
     Game Functions
     */
 
-    /// @notice Add a new Scoreboard. Game hash will be created by name and creator
-    /// @notice a funding is required to create a new game
-    /// @param name The name of the game
-    /// @param gameDescription A subtitle for the game
-    /// @return The hash of the newly created game
+    /// @notice Add a new leaderboard. Game hash will be created by name and creator
+    /// @notice a funding is required to create a new leaderboard
+    /// @param name The name of the leaderboard
+    /// @param gameDescription A subtitle for the leaderboard
+    /// @return The hash of the newly created leaderboard
     function addNewGame(bytes32 name, string gameDescription) public payable returns(bytes32 gameHash){
         require(msg.value >= gameCost);
         balance += msg.value;
@@ -88,25 +88,25 @@ contract BlockScores {
         emit newGameCreated(gameHash);
     }
 
-    /// @notice Simulate the creation of a game hash
-    /// @param name The name of the game
+    /// @notice Simulate the creation of a leaderboard hash
+    /// @param name The name of the leaderboard
     /// @param admin The address of the admin address
-    /// @return The possible hash of the game
+    /// @return The possible hash of the leaderboard
     function createGameHash(bytes32 name, address admin) pure public returns (bytes32){
         return keccak256(name, admin);
     }
 
-    /// @notice Get the metadata of a game
-    /// @param gameHash The hash of the game
-    /// @return Game name, desctiption and number of players
+    /// @notice Get the metadata of a leaderboard
+    /// @param gameHash The hash of the leaderboard
+    /// @return Leaderboard name, description and number of players
     function getGameByHash(bytes32 gameHash) constant public returns(bytes32,string,uint){
         return (games[gameHash].gameName, games[gameHash].gameDescription, games[gameHash].numPlayers);
     }
 
     /// @notice Overwrite game metadata as contract owner only
-    /// @param gameHash The hash of the game to be modified
-    /// @param name The new name of the game
-    /// @param gameDescription The new subtitle for the game
+    /// @param gameHash The hash of the leaderboard to be modified
+    /// @param name The new name of the leaderboard
+    /// @param gameDescription The new subtitle for the leaderboard
     /// @param gameOwner The address for the gameowner
     /// @return true
     function setGameMetadata(bytes32 gameHash, bytes32 name, string gameDescription, uint8 numPlayers, address gameOwner) isOwner public returns(bool) {
@@ -117,10 +117,10 @@ contract BlockScores {
         return true;
     }
 
-    /// @notice Overwrite game name and desctiption as game owner only
-    /// @param gameHash The hash of the game to be modified
-    /// @param name The new name of the game
-    /// @param gameDescription The new subtitle for the game
+    /// @notice Overwrite leaderboard name and desctiption as owner only
+    /// @param gameHash The hash of the leaderboard to be modified
+    /// @param name The new name of the leaderboard
+    /// @param gameDescription The new subtitle for the leaderboard
     /// @return true
     function changeGameMetadata(bytes32 gameHash, bytes32 name, string gameDescription) public returns(bool) {
         require(games[gameHash].gameOwner == msg.sender);
@@ -128,7 +128,7 @@ contract BlockScores {
         games[gameHash].gameDescription = gameDescription;
     }
 
-    /// @notice  event for newly created game
+    /// @notice event for newly created leaderboard
     event newGameCreated(bytes32 gameHash);
 
 
@@ -136,8 +136,8 @@ contract BlockScores {
     Player Functions
     */
 
-    /// @notice Add a new player to an existing game
-    /// @param gameHash The hash of the game
+    /// @notice Add a new player to an existing leaderboard
+    /// @param gameHash The hash of the leaderboard
     /// @param playerName The name of the player
     /// @return Player ID
     function addPlayerToGame(bytes32 gameHash, bytes32 playerName) public payable returns (bool) {
@@ -149,8 +149,8 @@ contract BlockScores {
         return true;
     }
 
-    /// @notice Get player data by game hash and player id/index
-    /// @param gameHash The hash of the game
+    /// @notice Get player data by leaderboard hash and player id/index
+    /// @param gameHash The hash of the leaderboard
     /// @param playerID Index number of the player
     /// @return Player name, confirmed score, unconfirmed score
     function getPlayerByGame(bytes32 gameHash, uint8 playerID) constant public returns (bytes32, uint, uint){
@@ -159,8 +159,8 @@ contract BlockScores {
         return (p.playerName, p.score, p.score_unconfirmed);
     }
 
-    /// @notice The game owner can remove a player
-    /// @param gameHash The hash of the game
+    /// @notice The leaderboard owner can remove a player
+    /// @param gameHash The hash of the leaderboard
     /// @param playerName The name of the player to be removed
     /// @return true/false
     function removePlayerFromGame(bytes32 gameHash, bytes32 playerName) public returns (bool){
@@ -173,7 +173,7 @@ contract BlockScores {
     }
 
     /// @notice Get the player id either by player Name or address
-    /// @param gameHash The hash of the game
+    /// @param gameHash The hash of the leaderboard
     /// @param playerName The name of the player
     /// @param playerAddress The player address
     /// @return ID or 999 in case of false
@@ -192,8 +192,8 @@ contract BlockScores {
     Score Functions
     */
 
-    /// @notice Add a unconfirmed score to game/player. Overwrites an existing unconfirmed score
-    /// @param gameHash The hash of the game
+    /// @notice Add a unconfirmed score to leaderboard/player. Overwrites an existing unconfirmed score
+    /// @param gameHash The hash of the leaderboard
     /// @param playerName The name of the player
     /// @param score Integer
     /// @return true/false
@@ -204,8 +204,8 @@ contract BlockScores {
         return true;
     }
 
-    /// @notice Confirm an unconfirmed score to game/player. Adds unconfirmed to existing score. Player can not confirm his own score
-    /// @param gameHash The hash of the game
+    /// @notice Confirm an unconfirmed score to leaderboard/player. Adds unconfirmed to existing score. Player can not confirm his own score
+    /// @param gameHash The hash of the leaderboard
     /// @param playerName The name of the player who's score should be confirmed
     /// @return true/false
     function confirmGameScore(bytes32 gameHash, bytes32 playerName) public returns (bool){
