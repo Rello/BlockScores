@@ -56,23 +56,23 @@
 
         <div class="row">
             <div class="one-half column">
-                <h5 onclick="toggleSection('newGame')">&rArr; Create a new game</h5>
+                <h5 onclick="toggleSection('newGame')">&rArr; Create leaderboard</h5>
                 <div id="newGameSection" class="sectionLeft" hidden>
                     <span>Current cost estimate </span><span id="introGameCost">0</span><span> ETH</span><br>
                     <span>Earn </span><span
                         id="introPlayerCost">x</span><span> ETH for every player added</span><br><br>
-                    <span>Title of your scoreboard</span><br><input id="newGameName" value="Title"><br>
-                    <span>Desctiption of the game </span><br><input id="newGameDescription" value="Description"><br>
+                    <span>Title of your leaderboard</span><br><input id="newGameName" value="Title"><br>
+                    <span>Description or Subtitle of the board</span><br><input id="newGameDescription" value="Description"><br>
                     <button id="newGame_button" onclick="addGame()">Create</button>
                 </div>
             </div>
             <div class="one-half column" style=" text-align: right;">
-                <h5 onclick="toggleSection('existingGame')">Open existing game &lArr;</h5>
+                <h5 onclick="toggleSection('existingGame')">Open leaderboard &lArr;</h5>
                 <div id="existingGameSection" class="sectionRight" hidden>
-                    <span>Existing game hash </span><br>
+                    <span>Existing key </span><br>
                     <input size="35" id="gameHash"
                            value="0xa65c01a8ff4316f70da194b46c9fe64ee64aaef2e4900b6878205d546ff5d02e"><br>
-                    <button id="existingGame_button" onclick="setGameURL()">open existing game</button>
+                    <button id="existingGame_button" onclick="setGameURL()">open board</button>
                 </div>
             </div>
         </div>
