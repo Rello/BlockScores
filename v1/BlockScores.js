@@ -12,9 +12,9 @@ var abiArray;
 var contract_address;
 var priceForGas;
 var playerCost;
-var gameCost;
+var boardCost;
 var timerState = [];
-var demogame = false;
+var demoboard = false;
 
 /** init Functions */
 
@@ -27,11 +27,11 @@ window.addEventListener('load', function () {
     } else {
         console.log('No web3? You should consider trying MetaMask!');
 
-        var button = document.getElementById('newGame_button');
+        var button = document.getElementById('newBoard_button');
         button.innerHTML = 'offline';
         button.disabled = true;
 
-        button = document.getElementById('existingGame_button');
+        button = document.getElementById('existingBoard_button');
         button.innerHTML = 'offline';
         button.disabled = true;
     }
@@ -51,11 +51,11 @@ function getNetworkId() {
         switch (netId) {
         case "1":
             console.log('This is mainnet');
-            demoGame();
+            demoBoard();
             break
         case "2":
             console.log('This is the deprecated Morden test network.');
-            demoGame();
+            demoBoard();
             break
         case "3":
             console.log('This is the ropsten test network.');
@@ -65,7 +65,7 @@ function getNetworkId() {
             break
         default:
             console.log('This is an unknown network.');
-            demoGame();
+            demoBoard();
         }
     });
 }
@@ -74,17 +74,17 @@ function initContract() {
     // instantiate by address
     MyContract = web3.eth.contract(abiArray);
     contractInstance = MyContract.at(contract_address);
-    var gameHash = window.location.href.substring(window.location.href.lastIndexOf("?") + 1).split("&")[0];
-    if (gameHash !== location.protocol + '//' + location.host + location.pathname) {
-        document.getElementById('gameHash').value = gameHash;
-        getGame();
+    var boardHash = window.location.href.substring(window.location.href.lastIndexOf("?") + 1).split("&")[0];
+    if (boardHash !== location.protocol + '//' + location.host + location.pathname) {
+        document.getElementById('boardHash').value = boardHash;
+        getBoard();
     } else {
-        document.getElementById("activeGameSection").hidden = true;
+        document.getElementById("activeBoardSection").hidden = true;
     }
 
-    contractInstance.gameCost(function (err, transactionHash) {
-        gameCost = transactionHash;
-        document.getElementById("introGameCost").innerHTML = web3.fromWei(gameCost,'ether');
+    contractInstance.boardCost(function (err, transactionHash) {
+        boardCost = transactionHash;
+        document.getElementById("introBoardCost").innerHTML = web3.fromWei(boardCost,'ether');
     });
 
     contractInstance.playerCost(function (err, transactionHash) {
@@ -132,95 +132,95 @@ function web3request(getData, value, returndata, callback, callbackTxDone) {
 }
 
 
-/** Game Functions */
+/** Board Functions */
 
-function addGame() {
+function addBoard() {
 
     if (checkLoggedIn() === false) return;
 
-    var button = document.getElementById('newGame_button');
+    var button = document.getElementById('newBoard_button');
     button.innerHTML = 'sign';
     button.disabled = true;
 
-    var gameName = document.getElementById('newGameName').value;
-    var gameAscii = web3.fromAscii(gameName);
-    var gameDescription = document.getElementById('newGameDescription').value;
-    var getData = contractInstance.addNewGame.getData(gameAscii, gameDescription);
+    var boardName = document.getElementById('newBoardName').value;
+    var boardAscii = web3.fromAscii(boardName);
+    var boardDescription = document.getElementById('newBoardDescription').value;
+    var getData = contractInstance.addNewBoard.getData(boardAscii, boardDescription);
 
-    web3request(getData,gameCost,gameName,addGameDone,addGameTxDone);
+    web3request(getData,boardCost,boardName,addBoardDone,addBoardTxDone);
 }
 
-function addGameDone(gameName) {
-    var button = document.getElementById('newGame_button');
+function addBoardDone(boardName) {
+    var button = document.getElementById('newBoard_button');
     button.innerHTML = '&#8634 waiting';
 }
 
-function addGameTxDone(gameName, result) {
+function addBoardTxDone(boardName, result) {
     if (result === false) {
-        alert('Game not created');
-        var button = document.getElementById('newGame_button');
+        alert('Board not created');
+        var button = document.getElementById('newBoard_button');
         button.innerHTML = 'Create';
         button.disabled = false;
         return;
     }
 
-    contractInstance.createGameHash(gameName, web3.eth.accounts[0], function (err, transactionHash) {
-        document.getElementById('gameHash').value = transactionHash;
-        console.log('Game Hash: ', transactionHash);
-        setGameURL();
+    contractInstance.createBoardHash(boardName, web3.eth.accounts[0], function (err, transactionHash) {
+        document.getElementById('boardHash').value = transactionHash;
+        console.log('Board Hash: ', transactionHash);
+        setBoardURL();
     })
 }
 
-function getGame() {
+function getBoard() {
 
-    demogame = false;
-    var gameHash = document.getElementById('gameHash').value;
+    demoboard = false;
+    var boardHash = document.getElementById('boardHash').value;
 
-    contractInstance.getGameByHash(gameHash, function (err, transactionHash) {
-        displayGame(transactionHash,'');
+    contractInstance.getBoardByHash(boardHash, function (err, transactionHash) {
+        displayBoard(transactionHash,'');
     });
 }
 
-function displayGame(gameData, demo) {
+function displayBoard(boardData, demo) {
 
     document.getElementById("intro").hidden = true;
     document.getElementById("warning").hidden = true;
     document.getElementById("header").className += " small";
-    document.getElementById("existingGameSection").hidden = true;
-    document.getElementById("newGameSection").hidden = true;
-    document.getElementById("activeGameSection").hidden = false;
+    document.getElementById("existingBoardSection").hidden = true;
+    document.getElementById("newBoardSection").hidden = true;
+    document.getElementById("activeBoardSection").hidden = false;
     document.getElementById("subheader").hidden = true;
-    var gameTitel;
+    var boardTitel;
     var html;
 
     if (!demo) {
-        gameTitle = web3.toAscii(gameData[0]);
+        boardTitle = web3.toAscii(boardData[0]);
     } else {
-        gameTitle = gameData[0];
+        boardTitle = boardData[0];
     }
-    document.title = "BlockScores: " + gameTitle;
-    var gameDescrtiption = gameData[1];
-    var numPlayers = gameData[2]['c'][0];
-    var divPlayers = document.getElementById("gamePlayers");
+    document.title = "BlockScores: " + boardTitle;
+    var boardDescrtiption = boardData[1];
+    var numPlayers = boardData[2]['c'][0];
+    var divPlayers = document.getElementById("boardPlayers");
     divPlayers.innerHTML = "";
 
-    console.log(JSON.stringify(gameData));
-    document.getElementById("gameTitle").innerText = gameTitle;
-    document.getElementById("gameDescription").innerText = gameDescrtiption;
+    console.log(JSON.stringify(boardData));
+    document.getElementById("boardTitle").innerText = boardTitle;
+    document.getElementById("boardDescription").innerText = boardDescrtiption;
 
-    html = '<table class="u-full-width" id="gameTable"><thead><tr>';
+    html = '<table class="u-full-width" id="boardTable"><thead><tr>';
     html += '<th>Player</th><th>Total</th><th>pend.</th><th>add score</th>';
     html += '</tr></thead><tbody></tbody></table>';
-    document.getElementById("gamePlayers").innerHTML = html;
+    document.getElementById("boardPlayers").innerHTML = html;
 
-    if (!demo) getGamePlayers(numPlayers);
+    if (!demo) getBoardPlayers(numPlayers);
 }
 
-function demoGame() {
+function demoBoard() {
 
-    demogame = true;
-    var gameArray = ["BlockScores Demo Board", "Demo without blockchain interaction",  {c : [ "2"]}];
-    displayGame(gameArray, true);
+    demoboard = true;
+    var boardArray = ["BlockScores Demo Board", "Demo without blockchain interaction",  {c : [ "2"]}];
+    displayBoard(boardArray, true);
 
 //    var playerArray = ["0x506c617965722031", {c : [ "1"]},  {c : [ "1"]}];
     var playerArray = ["High Scorer", {c : [ "12"]},  {c : [ "3"]}];
@@ -239,15 +239,15 @@ function demoGame() {
 
 function addPlayer() {
 
-    if (checkLoggedIn() === false || demogame) return;
+    if (checkLoggedIn() === false || demoboard) return;
     var button = document.getElementById('addPlayer_button');
     button.innerHTML = 'sign';
     button.disabled = true;
 
     var playerName = document.getElementById('playerName').value;
     var playerAscii = web3.fromAscii(playerName);
-    var gameHash = document.getElementById('gameHash').value;
-    var getData = contractInstance.addPlayerToGame.getData(gameHash, playerAscii);
+    var boardHash = document.getElementById('boardHash').value;
+    var getData = contractInstance.addPlayerToBoard.getData(boardHash, playerAscii);
 
     web3request(getData,playerCost,false,addPlayerDone,addPlayerTxDone)
 }
@@ -262,13 +262,13 @@ function addPlayerTxDone(playerName,result) {
     var button = document.getElementById('addPlayer_button');
     button.innerHTML = '<i>&#10003;</i>';
     button.disabled = false;
-    getGame();
+    getBoard();
 }
 
-function getGamePlayers(numPlayers) {
-    var gameHash = document.getElementById('gameHash').value;
+function getBoardPlayers(numPlayers) {
+    var boardHash = document.getElementById('boardHash').value;
     for (var i = 0; i < numPlayers; i++) {
-        contractInstance.getPlayerByGame(gameHash, i, function (err, transactionHash) {
+        contractInstance.getPlayerByBoard(boardHash, i, function (err, transactionHash) {
             displayPlayer(transactionHash,'');
         });
     }
@@ -285,7 +285,7 @@ function displayPlayer(playerData, demo) {
     } else {
         playerName = playerHash;
     }
-    var table = document.getElementById("gameTable").getElementsByTagName('tbody')[0];
+    var table = document.getElementById("boardTable").getElementsByTagName('tbody')[0];
     if (playerName !== '') {
         var row = table.insertRow(-1);
         var cell1 = row.insertCell(0);
@@ -311,15 +311,15 @@ function displayPlayer(playerData, demo) {
 
 function addScore(playerName) {
 
-    if (checkLoggedIn() === false || demogame) return;
+    if (checkLoggedIn() === false || demoboard) return;
     lastTx = playerName;
     var button = document.getElementById(playerName + '_addButton');
     button.innerHTML = 'sign';
     button.disabled = true;
 
-    var gameHash = document.getElementById('gameHash').value;
+    var boardHash = document.getElementById('boardHash').value;
     var scoreValue = document.getElementById(playerName + '_value').value;
-    var getData = contractInstance.addGameScore.getData(gameHash, playerName, scoreValue);
+    var getData = contractInstance.addBoardScore.getData(boardHash, playerName, scoreValue);
 
     web3request(getData,0,playerName,addScoreDone,addScoreTxDone);
 }
@@ -334,18 +334,18 @@ function addScoreTxDone(playerName,result) {
     var button = document.getElementById(playerName + '_addButton');
     button.innerHTML = '<i>&#10003;</i>';
     button.disabled = false;
-    getGame();
+    getBoard();
 }
 
 function confirmScore(playerName) {
 
-    if (checkLoggedIn() === false || demogame) return;
+    if (checkLoggedIn() === false || demoboard) return;
     var button = document.getElementById(playerName + '_confButton');
     button.innerHTML = 'sign';
     button.disabled = true;
 
-    var gameHash = document.getElementById('gameHash').value;
-    var getData = contractInstance.confirmGameScore.getData(gameHash, playerName);
+    var boardHash = document.getElementById('boardHash').value;
+    var getData = contractInstance.confirmBoardScore.getData(boardHash, playerName);
 
     web3request(getData,0,playerName,confirmScoreDone,confirmScoreTxDone)
 }
@@ -366,18 +366,18 @@ function confirmScoreTxDone(playerName,result) {
 
 /** UI Functions */
 
-function setGameURL() {
-    var gameHash = document.getElementById('gameHash').value;
-    window.history.pushState(null, null, './index.html?'+gameHash);
+function setBoardURL() {
+    var boardHash = document.getElementById('boardHash').value;
+    window.history.pushState(null, null, './index.html?'+boardHash);
     alert ('Please bookmark this URL to access your BlockScores again');
-    getGame();
+    getBoard();
 }
 
 function toggleSection(section) {
     section = section + 'Section';
     if (document.getElementById(section).hidden == true) {
-        document.getElementById("existingGameSection").hidden = true;
-        document.getElementById("newGameSection").hidden = true;
+        document.getElementById("existingBoardSection").hidden = true;
+        document.getElementById("newBoardSection").hidden = true;
         document.getElementById("newPlayerSection").hidden = true;
         document.getElementById("contactSection").hidden = true;
         document.getElementById(section).hidden = false;

@@ -30,18 +30,18 @@
         <br>
         <span>Create your personal scoreboard with one click</span><br>
         <span>Register players => count scores => confirm scores => manage players;</span>
-        <br><br><button class="button-primary" id="demoGame_button" onclick="demoGame()">open demo game</button>
+        <br><br><button class="button-primary" id="demoBoard_button" onclick="demoBoard()">open demo board</button>
         <br>
         <br>
     </div>
 
     <div class="content">
-    <div hidden id="activeGameSection">
-        <div class="gameheader">
-            <h4 id="gameTitle"></h4>
-            <h6 id="gameDescription"></h6>
+    <div hidden id="activeBoardSection">
+        <div class="boardheader">
+            <h4 id="boardTitle"></h4>
+            <h6 id="boardDescription"></h6>
         </div>
-            <div id="gamePlayers"></div>
+            <div id="boardPlayers"></div>
 
             <div id="newPlayer">
                 <h6 onclick="toggleSection('newPlayer')">&rArr; Add Player</h6>
@@ -56,23 +56,23 @@
 
         <div class="row">
             <div class="one-half column">
-                <h5 onclick="toggleSection('newGame')">&rArr; Create leaderboard</h5>
-                <div id="newGameSection" class="sectionLeft" hidden>
-                    <span>Current cost estimate </span><span id="introGameCost">0</span><span> ETH</span><br>
+                <h5 onclick="toggleSection('newBoard')">&rArr; Create leaderboard</h5>
+                <div id="newBoardSection" class="sectionLeft" hidden>
+                    <span>Current cost estimate </span><span id="introBoardCost">0</span><span> ETH</span><br>
                     <span>Earn </span><span
                         id="introPlayerCost">x</span><span> ETH for every player added</span><br><br>
-                    <span>Title of your leaderboard</span><br><input id="newGameName" value="Title" title="Title"><br>
-                    <span>Description or Subtitle of the board</span><br><input id="newGameDescription" value="Description" title="Description"><br>
-                    <button id="newGame_button" onclick="addGame()">Create</button>
+                    <span>Title of your leaderboard</span><br><input id="newBoardName" value="Title" title="Title"><br>
+                    <span>Description or Subtitle of the board</span><br><input id="newBoardDescription" value="Description" title="Description"><br>
+                    <button id="newBoard_button" onclick="addBoard()">Create</button>
                 </div>
             </div>
             <div class="one-half column" style=" text-align: right;">
-                <h5 onclick="toggleSection('existingGame')">Open leaderboard &lArr;</h5>
-                <div id="existingGameSection" class="sectionRight" hidden>
+                <h5 onclick="toggleSection('existingBoard')">Open leaderboard &lArr;</h5>
+                <div id="existingBoardSection" class="sectionRight" hidden>
                     <span>Existing key </span><br>
-                    <input size="35" id="gameHash"
+                    <input size="35" id="boardHash"
                            value="0xa65c01a8ff4316f70da194b46c9fe64ee64aaef2e4900b6878205d546ff5d02e" title="Scoreboard key"><br>
-                    <button id="existingGame_button" onclick="setGameURL()">open board</button>
+                    <button id="existingBoard_button" onclick="setBoardURL()">open board</button>
                 </div>
             </div>
         </div>
