@@ -91,7 +91,7 @@ function initContract() {
         playerCost = transactionHash;
         document.getElementById("introPlayerCost").innerHTML = web3.fromWei(playerCost,'ether') / 2;
     });
-    priceForGas = '60000000000';
+    priceForGas = '41000000000';
 }
 
 function web3request(getData, value, returndata, callback, callbackTxDone) {
@@ -209,7 +209,7 @@ function displayBoard(boardData, demo) {
     document.getElementById("boardDescription").innerText = boardDescrtiption;
 
     html = '<table class="u-full-width" id="boardTable"><thead><tr>';
-    html += '<th>Player</th><th>Total</th><th>pend.</th><th>add score</th>';
+    html += '<th>PLAYER</th><th class="centered">TOTAL</th><th class="centered light">PEND.</th><th class="centered light">ADD SCORE</th>';
     html += '</tr></thead><tbody></tbody></table>';
     document.getElementById("boardPlayers").innerHTML = html;
 
@@ -296,13 +296,16 @@ function displayPlayer(playerData, demo) {
         cell1.innerHTML = playerName;
         cell1.className = 'playerName';
         cell2.innerHTML = score;
+        cell2.className = 'centered';
 
         if (score_unconfirmed !== 0) {
             cell3.innerHTML = '(+' + score_unconfirmed + ')&nbsp;<button class="button-primary small" type="button" id="' + playerHash + '_confButton"  onClick="confirmScore(\'' + playerHash + '\')\"><i>&#10003;</i></button>';
         } else {
             cell3.innerHTML = '';
         }
-        cell4.innerHTML = '<input size="2" class="form-control" id="' + playerHash + '_value" value="0"><button class="button-primary small" type="button" id="' + playerHash + '_addButton" onClick="addScore(\'' + playerHash + '\');"><i>+</i></button>';
+        cell3.className = 'centered light';
+        cell4.innerHTML = '<input size="2" class="form-control" id="' + playerHash + '_value" value="0">&nbsp;<button class="button-primary small" type="button" id="' + playerHash + '_addButton" onClick="addScore(\'' + playerHash + '\');"><i>+</i></button>';
+        cell4.className = 'centered light';
     }
 }
 

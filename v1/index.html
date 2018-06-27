@@ -13,7 +13,7 @@
 <div class="container">
     <span class="network">Rospen Testnet</span>
     <div id="header" class="header">
-        <h2 onclick="location.href='./index.html'" style="cursor: pointer;">BlockScores</h2>
+        <h2 onclick="location.href='./index.html'" style="cursor: pointer; letter-spacing: 1rem;">BLOCK SCORES</h2>
         <h5 class="subheader" id="subheader">No coins, no tokens - just scores</h5>
     </div>
 
@@ -30,68 +30,60 @@
         <br>
         <span>Create your personal scoreboard with one click</span><br>
         <span>Register players => count scores => confirm scores => manage players;</span>
-        <br><br><button class="button-primary" id="demoBoard_button" onclick="demoBoard()">open demo board</button>
+        <br><br>
+        <button class="button-primary" id="demoBoard_button" onclick="demoBoard()">open demo board</button>
         <br>
         <br>
     </div>
 
     <div class="content">
-    <div hidden id="activeBoardSection">
-        <div class="boardheader">
-            <h4 id="boardTitle"></h4>
-            <h6 id="boardDescription"></h6>
-        </div>
+        <div hidden id="activeBoardSection">
+            <div class="boardheader">
+                <h4 id="boardTitle"></h4>
+                <h6 id="boardDescription"></h6>
+            </div>
             <div id="boardPlayers"></div>
 
             <div id="newPlayer">
-                <h6 onclick="toggleSection('newPlayer')">&rArr; Add Player</h6>
+                <h6 onclick="toggleSection('newPlayer')"><span class="control-icon">+</span>&nbsp;PLAYER</h6>
                 <div id="newPlayerSection" hidden>
                     <input id="playerName" value="Player Name" title="Player Name"><br>
-                    <button id="addPlayer_button" onclick="addPlayer()">add</button>
-                </div>
-            </div>
-    </div>
-        <br>
-        <br>
-
-        <div class="row">
-            <div class="one-half column">
-                <h5 onclick="toggleSection('newBoard')">&rArr; Create leaderboard</h5>
-                <div id="newBoardSection" class="sectionLeft" hidden>
-                    <span>Current cost estimate </span><span id="introBoardCost">0</span><span> ETH</span><br>
-                    <span>Earn </span><span
-                        id="introPlayerCost">x</span><span> ETH for every player added</span><br><br>
-                    <span>Title of your leaderboard</span><br><input id="newBoardName" value="Title" title="Title"><br>
-                    <span>Description or Subtitle of the board</span><br><input id="newBoardDescription" value="Description" title="Description"><br>
-                    <button id="newBoard_button" onclick="addBoard()">Create</button>
-                </div>
-            </div>
-            <div class="one-half column" style=" text-align: right;">
-                <h5 onclick="toggleSection('existingBoard')">Open leaderboard &lArr;</h5>
-                <div id="existingBoardSection" class="sectionRight" hidden>
-                    <span>Existing key </span><br>
-                    <input size="35" id="boardHash"
-                           value="0xa65c01a8ff4316f70da194b46c9fe64ee64aaef2e4900b6878205d546ff5d02e" title="Scoreboard key"><br>
-                    <button id="existingBoard_button" onclick="setBoardURL()">open board</button>
+                    <button id="addPlayer_button" class="button-primary" onclick="addPlayer()">add</button>
                 </div>
             </div>
         </div>
-
-        <div class="row">
-            <div class="one-half column">
-                <h5 onclick="toggleSection('contact')">&rArr; Issues & Help</h5>
-                <div id="contactSection" class="sectionLeft" hidden>
-                    <span>Issue tracker at <a href="https://github.com/Rello/BlockScores/issues" target="_blank">GitHub</a></span><br>
-                    <span>Help & FAQ at <a href="http://blockscores.com/faq" target="_blank">BlockScores.com</a></span><br>
-                    <span><a href="mailto:help@blockscores.com" target="_blank">Developer feedback</a></span><br>
-                </div>
-            </div>
-            <div class="one-half column" style=" text-align: right;">
-            </div>
+<br>
+        <span onclick="toggleSection('newBoard')"><span
+                class="control-icon">&#9655;</span>&nbsp;CREATE LEADERBOARD</span>
+        <div id="newBoardSection" class="sectionLeft" hidden>
+            <span>Current cost estimate </span><span id="introBoardCost">0</span><span> ETH</span><br>
+            <span>Earn </span><span
+                id="introPlayerCost">x</span><span> ETH for every player added</span><br><br>
+            <span>Title of your leaderboard</span><br><input id="newBoardName" value="Title" title="Title"><br>
+            <span>Description or Subtitle of the board</span><br><input id="newBoardDescription" value="Description"
+                                                                        title="Description"><br>
+            <button id="newBoard_button" class="button-primary" onclick="addBoard()">Create</button>
+        </div>
+        <br>
+        <span onclick="toggleSection('existingBoard')"><span class="control-icon">&#9655;</span>&nbsp;OPEN LEADERBOARD</span>
+        <div id="existingBoardSection" class="sectionLeft" hidden>
+            <span>Existing key </span><br>
+            <input size="35" id="boardHash"
+                   value="0xa65c01a8ff4316f70da194b46c9fe64ee64aaef2e4900b6878205d546ff5d02e"
+                   title="Scoreboard key"><br>
+            <button id="existingBoard_button" class="button-primary" onclick="setBoardURL()">open board</button>
+        </div>
+        <br>
+        <br>
+        <span onclick="toggleSection('contact')"><span class="underlinded">ISSUES & HELP</span></span>
+        <div id="contactSection" class="sectionLeft" hidden>
+            <span>Issue tracker at <a href="https://github.com/Rello/BlockScores/issues"
+                                      target="_blank">GitHub</a></span><br>
+            <span>Help & FAQ at <a href="http://blockscores.com/faq" target="_blank">BlockScores.com</a></span><br>
+            <span><a href="mailto:help@blockscores.com" target="_blank">Developer feedback</a></span><br>
         </div>
 
     </div>
-</div>
-<div class="footer" onclick="location.href='http://blockscores.com'">provided by BlockScores.com</div>
+    <div class="footer" onclick="location.href='http://blockscores.com'">provided by BlockScores.com</div>
 </body>
 </html>

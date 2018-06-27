@@ -39,9 +39,7 @@
 .header {
     /*margin-top: 3rem;*/
     text-align: center;
-    background-color: steelblue;
     color: #F1F1F1;
-
     background-image: url('http://blockscores.com/wp-content/uploads/2018/05/logo_corner-3.png');
     background-position: 10px center;
     background-repeat: no-repeat;
@@ -84,33 +82,50 @@
     max-width: 100px;
 }
 .button-primary.small {
-    height: 30px;
-    padding: 0 10px;
-    line-height: 20px;
+    height: 20px;
+    width: 20px;
+    padding: 0;
+    line-height: 15px;
 }
 
 .sectionLeft {
-    border-left-width: 1px;
+    /*border-left-width: 1px;
     border-left-style: solid;
-    padding-left: 10px;
+    padding-left: 10px;*/
+    margin-left: 30px;
 }
 
 .sectionRight {
-    border-right-width: 1px;
-    border-right-style: solid;
-    padding-right: 10px;
+border-right-width: 1px;
+border-right-style: solid;
+padding-right: 10px;
 }
 
 .footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    cursor: pointer;
-    background-color: ghostwhite;
+position: fixed;
+left: 0;
+bottom: 0;
+width: 100%;
+text-align: center;
+cursor: pointer;
+background-color: #5e5e5e;
 }
 
+.control-icon {
+color: #33C3F0;
+}
+
+.underlinded {
+border-bottom: 1px solid #33C3F0;
+}
+
+.centered {
+    text-align: center;
+}
+
+.light {
+    color: #aaa;
+}
 /* Grid
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .container {
@@ -129,7 +144,6 @@
 /* For devices larger than 400px */
 @media (min-width: 400px) {
     .container {
-        width: 85%;
         padding: 0; }
 }
 
@@ -210,8 +224,8 @@ body {
     line-height: 1.6;
     font-weight: 400;
     font-family: 'Open Sans', sans-serif;
-    color: #656D6D;
-    background-color: ghostwhite;
+    color: #fff;
+    background-color: #5e5e5e;
 }
 
 
@@ -292,8 +306,7 @@ button.button-primary,
 input[type="submit"].button-primary,
 input[type="reset"].button-primary,
 input[type="button"].button-primary {
-    color: #FFF;
-    background-color: #33C3F0;
+    color: #33C3F0;
     border-color: #33C3F0; }
 .button.button-primary:hover,
 button.button-primary:hover,
@@ -414,7 +427,7 @@ td {
     /*padding: 12px 15px;*/
     padding: 5px;
     text-align: left;
-    border-bottom: 1px solid #E1E1E1; }
+    border-bottom: 1px solid #919191; }
 th:first-child,
 td:first-child {
     padding-left: 0; }
@@ -427,12 +440,13 @@ td:last-child {
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 button,
 .button {
-    margin-bottom: 1rem; }
+    /* margin-bottom: 1rem;*/ }
 input,
 textarea,
 select,
 fieldset {
-    margin-bottom: 1.5rem; }
+    /* margin-bottom: 1.5rem;*/
+    text-align: center;}
 pre,
 blockquote,
 dl,
@@ -442,7 +456,8 @@ p,
 ul,
 ol,
 form {
-    margin-bottom: 2.5rem; }
+margin-bottom: 2.5rem;
+border-spacing: 0px;}
 
 
 /* Utilities
