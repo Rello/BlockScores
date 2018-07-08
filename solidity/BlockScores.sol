@@ -3,7 +3,7 @@ pragma solidity ^0.4.20;
 /// @author Marcel Scherello blockscores@scherello.de
 /// @notice Create a custom leaderboard and start counting the scores
 /// @dev All function calls are currently implement without side effects
-/// @dev V1.1.0
+/// @dev v1.1.0
 contract BlockScores {
     struct Player {
         bytes32  playerName;
@@ -63,7 +63,7 @@ contract BlockScores {
     function split(address boardOwner, uint _amount) internal returns(bool) {
         emit Withdrawal(owner, _amount/2);
         owner.transfer(_amount/2);
-        emit Withdrawal(boardOwner, _amount/2);
+        //emit Withdrawal(boardOwner, _amount/2);
         boardOwner.transfer(_amount/2);
         return true;
     }
